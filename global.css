@@ -3,15 +3,42 @@
   margin: 0;
 
   box-sizing: border-box;
+
+  font-family: 'Lato', sans-serif;
 }
 
 body {
   height: 100vh;
   width: 100vw;
+
+  background-color: #ECF4FC;
 }
 
 /* BUTTON */
 button {
   cursor: pointer;
   line-height: normal;
+}
+
+img {
+  object-fit: contain;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#background {
+  z-index: -5;
+  position: absolute;
+  
+  height: 100vh;
+  width: 100%;
+
+  max-width: 700px;
+
+  object-fit: contain;
+
+  opacity: 0.3;
 }

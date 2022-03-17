@@ -1,0 +1,11 @@
+- Header
+  - Título: Nome do tipo da interação -> ["Aula", "AtividadeCompletar", "AtividadeDigitar"]
+  - Dashboard button
+
+- Letra
+  - case -> ["maiuscula", "minuscula"]
+  - () => tocarSom
+--------------------------------------
+- Sessão
+  - Bloco atual
+    - Interação atual -> ["Aula", "AtividadeCompletar", "AtividadeDigitar"]

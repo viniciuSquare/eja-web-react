@@ -1,0 +1,22 @@
+{ // BLOCO
+  "bloco" : {
+    "id": 1,
+    "aula": { },
+    "atividadeCompletar": {
+      "id":1,
+      "palavraCompleta":"AMORA",
+      "palavraIncompleta":"AMO__",
+      "audio":"Agora complete a palavra AMORA",
+      "alternativas": [
+        {
+          "id":1,"correta":true,
+          "textoAlternativa":"RA"
+        }, {
+          "id":2,
+          "correta":false,"textoAlternativa":"MO"
+        }
+      ]
+    },
+    "atividadeDigitar": { }
+  }
+}

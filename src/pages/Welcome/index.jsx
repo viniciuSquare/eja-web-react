@@ -1,13 +1,31 @@
 import { StyledWelcome } from "./styled";
 
 import googleIcon from '../../assets/icons/google-icon.svg'
+import { useAuth } from "../../hooks/useAuth";
 
 export function Welcome() {
+
+  const { user, setUser } = useAuth();
+
+  const mock_userData= {
+    name: "Vinicius",
+    bloco: 1,
+    aula: true,
+    atividadeCompletar: false,
+    atividadeDigitar: false
+  }
+
+  function siginWithGoogle() {
+    setUser({logged:true})
+
+    localStorage.setItem("user", JSON.stringify(mock_userData))
+  }
+
   return(
     <StyledWelcome>
       <h1 className="page-title saldacao">Sejam bem-vindos ao ALMA</h1>
       <div className="login">
-        <button className="login" id="google-login">
+        <button onClick={ siginWithGoogle } className="login" id="google-login">
           <img src={googleIcon} alt="Logo do Google" />
           Entrar com Google
         </button>

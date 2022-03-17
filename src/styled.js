@@ -1,19 +1,36 @@
 import styled from "styled-components";
 
 export const StyledApp = styled.div`
+  /* * { // DEBUG STYLE
+    outline: 1px solid red;
+  }  */
+  
   display: flex;
   justify-content: center;
   
   height: 100vh;
   width: 100vw;
 
-  background: url('./src/assets/images/alma-logo.jpg') no-repeat;
-  background-color: #C5DCF0;
-  background-position: 50% 50%;
+  position: relative;
 
   .page-content {
     max-width: 800px;
-    width: 100%;
+    width: 98%;
+
+    > div {
+      display: flex;
+  
+      height: 100%;
+      
+      padding: 4rem 1rem 5rem;
+
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+
+  .page-title {
+    color: #1F4A75;
   }
 
 `
