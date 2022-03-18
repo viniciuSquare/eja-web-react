@@ -3,31 +3,41 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { StyledApp } from './styled'
 
-import { Home } from './pages/Home'
 import { Bloco } from './pages/Blocos'
-import { AuthContextProvider } from './Contexts/AuthContext'
+
+import { useAuth } from './hooks/useAuth'
+import { Dashboard } from './pages/Dashboard'
+import { Welcome } from './pages/Welcome'
 import { SessionContextProvider } from './Contexts/SessionContext'
 
+function isAuthenticated(bool) {
+  return bool;
+}
+
 function Router() {
-  const [count, setCount] = useState(0)
+  const { user } = useAuth();
 
   return (
-    <AuthContextProvider>
-      <SessionContextProvider>
-      {/* TODO - (SESSION) =>  setHelpAudio  */}
-        <StyledApp >
-          <img id="background" src="./src/assets/images/alma-logo.png" alt="Logo Alma"/>
-          <div className="page-content">
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Home/>} exact />
-                <Route path='/bloco' element={<Bloco/>} />
-              </Routes>
-            </BrowserRouter>
-          </div>
-        </StyledApp>
-      </SessionContextProvider>
-    </AuthContextProvider>
+    <StyledApp>
+      <img id="background" src="./src/assets/images/alma-logo.png" alt="Logo Alma"/>
+      <div className="page-content">
+        { !user.logged ?
+          <Welcome />
+          : 
+          (
+            <SessionContextProvider>
+            {/* TODO - (SESSION) =>  setHelpAudio  */}  
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Dashboard/>} exact />
+                  <Route path='/bloco' element={<Bloco/>} />
+                </Routes>
+              </BrowserRouter>
+            </SessionContextProvider>
+          )
+        }
+      </div>
+    </StyledApp>
   )
 }
 

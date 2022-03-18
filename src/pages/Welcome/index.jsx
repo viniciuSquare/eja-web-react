@@ -9,16 +9,17 @@ export function Welcome() {
 
   const mock_userData= {
     name: "Vinicius",
-    bloco: 1,
-    aula: true,
-    atividadeCompletar: false,
-    atividadeDigitar: false
+    logged: true,
+    bloco: {
+      id :1,
+      aula: true,
+      atividadeCompletar: false,
+      atividadeDigitar: false
+    }
   }
 
   function siginWithGoogle() {
-    setUser({logged:true})
-
-    localStorage.setItem("user", JSON.stringify(mock_userData))
+    setUser(mock_userData)
   }
 
   return(
