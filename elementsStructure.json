@@ -1,4 +1,4 @@
-{ // BLOCO
+{
   "bloco" : {
     "id": 1,
     "aula": { },
@@ -18,5 +18,49 @@
       ]
     },
     "atividadeDigitar": { }
+  }
+}
+
+
+{
+  "aula": {
+    "id":2,
+    "audio":"Está é uma palavra que começa com a letra \"B\"",
+    "urlImagem":"http:\/\/letras\/letra-b.png",
+    "letraReferencia":"B"
+    },
+  "atividadeCompletar":{
+    "id":2,
+    "palavraCompleta":"BOLA",
+    "palavraIncompleta":"BO__",
+    "audio":"Agora complete a palavra BOLA",
+    "alternativas": [ 
+      {
+        "id":6,
+        "correta":true,
+        "textoAlternativa":"LA"
+      },{
+        "id":7,
+        "correta":false,
+        "textoAlternativa":"RA"
+      },{
+        "id":8,
+        "correta":false,
+        "textoAlternativa":"CHA"},
+      {
+        "id":9,
+        "correta":false,
+        "textoAlternativa":"CE"},
+      {
+        "id":10,
+        "correta":false,
+        "textoAlternativa":"DA"
+      }
+    ]
+  },
+  "atividadeDigitar": {
+    "id":2,
+    "respostaCorreta":"BASQUETE",
+    "audio":"Agora digite BASQUETE"
   }
 }

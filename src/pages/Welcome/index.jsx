@@ -5,17 +5,10 @@ import { useAuth } from "../../hooks/useAuth";
 
 export function Welcome() {
 
-  const { user, setUser } = useAuth();
-
+  const { setUser } = useAuth();
   const mock_userData= {
     name: "Vinicius",
     logged: true,
-    bloco: {
-      id :1,
-      aula: true,
-      atividadeCompletar: false,
-      atividadeDigitar: false
-    }
   }
 
   function siginWithGoogle() {

@@ -7,8 +7,17 @@ import { HelpButton } from "../../Components/HelpButton";
 
 import booksIcon from '../../assets/icons/Books_Aulas_Icon.png'
 import abcIcon from '../../assets/icons/ABC_Alfabeto_Icon.png'
+import { useEffect } from "react/cjs/react.development";
+import { useSession } from "../../hooks/useSession";
 
 export function Dashboard() {
+
+  const {setHelpAudio} = useSession()
+  
+  useEffect(()=>{
+    setHelpAudio("Este é o DASHBOARD! Aqui é possível ver o progresso atual, entrar no alfabeto e nos blocos de aula.")
+  },[])
+
   return(
     <StyledDashboard>
       <div className="user-header">
@@ -28,7 +37,7 @@ export function Dashboard() {
           <img src={abcIcon} alt="menu icon" />
           <h3>Alfabeto</h3>
         </Link>
-        <Link to="aulas">
+        <Link to="bloco">
           <img src={booksIcon} alt="menu icon" />
           <h3>Aulas</h3>
         </Link>

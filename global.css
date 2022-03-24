@@ -18,6 +18,9 @@ body {
 button {
   cursor: pointer;
   line-height: normal;
+  outline: none;
+  border: none;
+  background: transparent;
 }
 
 img {

@@ -1,14 +1,24 @@
-import {createContext, useState} from 'react'
+import { createContext, useState } from 'react'
+import { useEffect } from 'react/cjs/react.development';
+
+import api from '../services/api'
 
 export const SessionContext = createContext({});
 
 export function SessionContextProvider(props) {
+  const env = "dev"
 
   let MOCK_blockData = { // BLOCO
     bloco : {
-      id: 1,
+      id: 2,
       type: "mock",
-      aula: { },
+      aula: {
+        id:1,
+        audio:"Está é uma palavra que começa com a letra \"A\"",
+        urlImagem:"",
+        imageDescription: "asas",
+        letraReferencia:"A",
+      },
       atividadeCompletar: {
         id: 1,
         palavraCompleta: "AMORA",
@@ -27,11 +37,55 @@ export function SessionContextProvider(props) {
           }
         ]
       },
-      atividadeDigitar: { }
+      atividadeDigitar: {
+        id:1,
+        respostaCorreta:"BASQUETE",
+        audio:"Agora digite BASQUETE"
+      }
     }
   }
+  const baseBlocoStructure = {
+    id: 1,
+    aula: false,
+    atividadeCompletar: false,
+    atividadeDigitar: false,
+  }
+  const [ currentBlocoData, setCurrentBlocoData ] = useState({ });
+  const [ currentState, setCurrentState ] = useState({...baseBlocoStructure});
 
-  const [currentBloco, setCurrentBloco] = useState({ });
+  const [helpAudio, setHelpAudio] = useState('Clique no desenho da casa para ir à página inicial')
+  
+  useEffect(()=>{
+    console.log("Alterado")
+    
+    setCurrentBlocoData({...MOCK_blockData.bloco})
+    
+  },[currentState])
+      
+  useEffect(()=>{
+    let localStorageBlocoState = JSON.parse(localStorage.getItem("bloco"));
+    console.log("LSB", localStorageBlocoState)
+  
+    if(!localStorageBlocoState) {
+      localStorage.setItem('bloco', JSON.stringify(currentState));
+      localStorageBlocoState = {...currentState}
+    }
+  },[])
+
+
+  
+
+  function nextBlocoStateUpdate(blocoId) {
+    setCurrentState ({
+      id: blocoId,
+      ...baseBlocoStructure    
+    })
+  }
+
+  async function fetchBlocoData(bloco) {
+    await api.get(`/${bloco.id}`)
+      .then(({data}) => setCurrentBlocoData(data))
+  }
 
   function setMockBlocoData() {
     if(!localStorage.getItem("bloco")) {
@@ -39,28 +93,17 @@ export function SessionContextProvider(props) {
     }    
   }
 
-  function getCurrentBlock() {
-    let blocoData 
-
-    while(localStorage.getItem("bloco") == null) {
-      setMockBlocoData();
-
-      console.log("Rodei")
-    }
-
-    blocoData = JSON.parse(localStorage.getItem("bloco"))
-    
-    console.log("SESSION CONTEXT RUNNED\n BLOCO DATA:", blocoData.bloco);
-    
-    return blocoData;
-  }
-
-  getCurrentBlock()
+  // CHECK CURRENT STATE
+  // FETCH BLOCK DATA
+    // FEED BLOCK DATA  
 
   return(
     <SessionContext.Provider 
       value={{
-        currentBloco, setCurrentBloco,
+        currentBlocoData, setCurrentBlocoData,
+        currentState, setCurrentState,
+        nextBlocoStateUpdate, 
+        helpAudio, setHelpAudio
       }}
     >
       {props.children}

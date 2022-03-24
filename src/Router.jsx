@@ -21,7 +21,7 @@ function Router() {
     <StyledApp>
       <img id="background" src="./src/assets/images/alma-logo.png" alt="Logo Alma"/>
       <div className="page-content">
-        { !user.logged ?
+        { user != null && !user?.logged ?
           <Welcome />
           : 
           (
