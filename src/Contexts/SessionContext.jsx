@@ -8,7 +8,7 @@ export const SessionContext = createContext({});
 export function SessionContextProvider(props) {
   const env = "dev"
 
-  let MOCK_blockData = { // BLOCO
+  let MOCK_blockData = { // MOCK DATA TO WORK WITHOUT THE API
     bloco : {
       id: 2,
       type: "mock",
@@ -16,7 +16,7 @@ export function SessionContextProvider(props) {
         id:1,
         audio:"Está é uma palavra que começa com a letra \"A\"",
         urlImagem:"",
-        imageDescription: "asas",
+        palavra: "asas",
         letraReferencia:"A",
       },
       atividadeCompletar: {
@@ -50,6 +50,7 @@ export function SessionContextProvider(props) {
     atividadeCompletar: false,
     atividadeDigitar: false,
   }
+
   const [ currentBlocoData, setCurrentBlocoData ] = useState({ });
   const [ currentState, setCurrentState ] = useState({...baseBlocoStructure});
 
@@ -63,16 +64,19 @@ export function SessionContextProvider(props) {
   },[currentState])
       
   useEffect(()=>{
+    
+  },[])
+
+  function updateCurrentState(id = 1, iteration) {
     let localStorageBlocoState = JSON.parse(localStorage.getItem("bloco"));
     console.log("LSB", localStorageBlocoState)
   
     if(!localStorageBlocoState) {
+      // ESTADO ATUAL COM ID DO BLOCO E INTERAÇÃO A FAZER/FEITA
       localStorage.setItem('bloco', JSON.stringify(currentState));
       localStorageBlocoState = {...currentState}
     }
-  },[])
-
-
+  }
   
 
   function nextBlocoStateUpdate(blocoId) {
@@ -80,6 +84,8 @@ export function SessionContextProvider(props) {
       id: blocoId,
       ...baseBlocoStructure    
     })
+    // TODO - UPDATE currentBlocoData TO NEW BLOCO
+    // fectchBlocoData(blocoId);
   }
 
   async function fetchBlocoData(bloco) {

@@ -7,7 +7,7 @@ export function Header({tipoInteracao}) {
     <HeaderStyled>
       <h1>{tipoInteracao}</h1>
       <a href="/" className="link-btn">
-        <BsFillHouseFill size="2rem"/>
+        <BsFillHouseFill size="2rem" color="0f253b"/>
       </a>
     </HeaderStyled>
   )
