@@ -22,8 +22,10 @@ export const StyledApp = styled.div`
   
       height: 100%;
       
-      padding: 4rem 1rem 5rem;
+      &#dashboard {
+        padding: 4rem 1rem 5rem;
 
+      }
       flex-direction: column;
       justify-content: space-between;
     }

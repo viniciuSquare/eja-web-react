@@ -5,45 +5,7 @@ import api from '../services/api'
 
 export const SessionContext = createContext({});
 
-export function SessionContextProvider(props) {
-  const env = "dev"
-
-  let MOCK_blockData = { // MOCK DATA TO WORK WITHOUT THE API
-    bloco : {
-      id: 2,
-      type: "mock",
-      aula: {
-        id:1,
-        audio:"Está é uma palavra que começa com a letra \"A\"",
-        urlImagem:"",
-        palavra: "asas",
-        letraReferencia:"A",
-      },
-      atividadeCompletar: {
-        id: 1,
-        palavraCompleta: "AMORA",
-        palavraIncompleta: "AMO__",
-        audio: "Agora complete a palavra AMORA",
-        alternativas: [
-          {
-            id: 1,
-            correta: true,
-            textoAlternativa: "RA"
-          }, 
-          {
-            id:2,
-            correta: false,
-            textoAlternativa: "MO"
-          }
-        ]
-      },
-      atividadeDigitar: {
-        id:1,
-        respostaCorreta:"BASQUETE",
-        audio:"Agora digite BASQUETE"
-      }
-    }
-  }
+export function SessionContextProvider({children}) {  
   const baseBlocoStructure = {
     id: 1,
     aula: false,
@@ -51,68 +13,132 @@ export function SessionContextProvider(props) {
     atividadeDigitar: false,
   }
 
-  const [ currentBlocoData, setCurrentBlocoData ] = useState({ });
+  const [ isLoading, setIsLoading ] = useState(true);
+
+  const [ currentBlocoData, setCurrentBlocoData ] = useState({});
   const [ currentState, setCurrentState ] = useState({...baseBlocoStructure});
+  const [ activeInteraction, setActiveInteraction] = useState({});
 
   const [helpAudio, setHelpAudio] = useState('Clique no desenho da casa para ir à página inicial')
-  
-  useEffect(()=>{
-    console.log("Alterado")
-    
-    setCurrentBlocoData({...MOCK_blockData.bloco})
-    
-  },[currentState])
       
-  useEffect(()=>{
-    
-  },[])
+  // RETURN IF ALL THE INTERACTIONS ARE DONE;
+  let interactionValidation = (currentState) => {
+    let interactionsState = { ...currentState }
+    delete interactionsState.id;
 
-  function updateCurrentState(id = 1, iteration) {
-    let localStorageBlocoState = JSON.parse(localStorage.getItem("bloco"));
-    console.log("LSB", localStorageBlocoState)
-  
-    if(!localStorageBlocoState) {
-      // ESTADO ATUAL COM ID DO BLOCO E INTERAÇÃO A FAZER/FEITA
-      localStorage.setItem('bloco', JSON.stringify(currentState));
-      localStorageBlocoState = {...currentState}
+    return Object.values(interactionsState).every(interaction => interaction == true);
+  } 
+
+  const updateActiveInteraction = (currentBlocoData, currentState) => {
+    if(currentBlocoData?.id) {
+      console.log("CURRENT BLOCO ID: ", currentBlocoData?.id)
+      // DETERMINE WHICH IS THE ACTIVE INTERACTION
+      if(currentState?.aula == false){
+        setActiveInteraction({key: "aula", title: 'Aula', letraReferencia: currentBlocoData.letraReferencia,...currentBlocoData.aula})
+        console.log("aula IS ACTIVE")
+      }
+      else if(currentState?.atividadeCompletar == false){
+        setActiveInteraction({key: "atividadeCompletar", title: 'Atividade Completar',letraReferencia: currentBlocoData.letraReferencia, ...currentBlocoData.atividadeCompletar})
+        console.log("atividadeCompletar IS ACTIVE")
+        }
+      else if(currentState?.atividadeDigitar == false){
+        setActiveInteraction({key: "atividadeDigitar" , title: 'Atividade Digitar',letraReferencia: currentBlocoData.letraReferencia, ...currentBlocoData.atividadeDigitar})
+        console.log("atividadeDigitar IS ACTIVE")
+
+      } else if(interactionValidation(currentState)) {
+        // TODO -> UPDATE CURRENT STATE BLOCO & getCurrentBlocoData();
+        let temp_currentState = {...baseBlocoStructure};
+        temp_currentState.id = currentState.id + 1;
+
+        console.log('temp currernt state: ', temp_currentState);
+
+        setIsLoading(true);
+        setCurrentState({...temp_currentState});
+
+        localStorage.setItem('bloco',JSON.stringify(temp_currentState));
+
+      }
+
+      setIsLoading(false)
+
+    } else {
+      console.log("THERE IS NO CURRENT BLOCO");
     }
   }
   
+  const getCurrentBlocoData = async () => {
+    await api.get(`/?id=${currentState.id}`)
+      .then( ({data}) => {
+        if(currentBlocoData?.id != data.blocoData.id ) {
+          setCurrentBlocoData(data.blocoData);
+          updateActiveInteraction(data.blocoData, currentState);
+        }
+      } )
+    // TODO -> IF THERE IS BLOCO DATA (INTERECTION COMPLETETION CASE), DO NOT SET BLOCO DATA.
 
-  function nextBlocoStateUpdate(blocoId) {
-    setCurrentState ({
-      id: blocoId,
-      ...baseBlocoStructure    
+    // return data.blocoData
+  }
+
+  const nextInteractionHandler = () => {
+    console.log("Next interaction handler")
+    setCurrentState({
+      ...currentState,
+      [activeInteraction.key] : true
     })
-    // TODO - UPDATE currentBlocoData TO NEW BLOCO
-    // fectchBlocoData(blocoId);
+
+    const currentStateUpdatedValue = {
+      ...currentState,
+      [activeInteraction.key] : true
+    }
+    
+    updateActiveInteraction(currentBlocoData, currentStateUpdatedValue);
+
+    localStorage.setItem('bloco',JSON.stringify(currentStateUpdatedValue));
   }
 
-  async function fetchBlocoData(bloco) {
-    await api.get(`/${bloco.id}`)
-      .then(({data}) => setCurrentBlocoData(data))
-  }
+  // SET CURRENT STATE
+  useEffect(()=>{
+    let localStorageBlocoState = JSON.parse(localStorage.getItem("bloco"));
+    console.log("LS Bloco", localStorageBlocoState)
+    
+    // ESTADO ATUAL COM ID DO BLOCO E INTERAÇÃO A FAZER/FEITA
+    if(!localStorageBlocoState) {
+      console.log("ESTADO ATUAL ATUALIZADO COMO ESTADO BASE")
+      localStorage.setItem('bloco', JSON.stringify(currentState));
+      localStorageBlocoState = {...currentState}
 
-  function setMockBlocoData() {
-    if(!localStorage.getItem("bloco")) {
-      localStorage.setItem("bloco", JSON.stringify(MOCK_blockData));
-    }    
-  }
+    } else {
+      console.log("ESTADO ATUAL ATUALIZADO EM RELAÇÃO AO localStorage")
+      setCurrentState({...localStorageBlocoState})
+    }
+    
+  },[])
 
-  // CHECK CURRENT STATE
-  // FETCH BLOCK DATA
-    // FEED BLOCK DATA  
+  // UPDATE SCREEN HELP AUDIO ACORDING TO ACTIVE INTERACTION
+  useEffect(()=>{
+    console.log("ACTIVE INTERACTION UPDATED", activeInteraction);
+
+    if(activeInteraction.audio) {
+      setHelpAudio(activeInteraction.audio);
+    }
+
+  },[activeInteraction])
 
   return(
     <SessionContext.Provider 
       value={{
         currentBlocoData, setCurrentBlocoData,
         currentState, setCurrentState,
-        nextBlocoStateUpdate, 
-        helpAudio, setHelpAudio
+        activeInteraction,
+        helpAudio, setHelpAudio,
+        // TODO
+        nextInteractionHandler, 
+        getCurrentBlocoData,
+        isLoading, setIsLoading
+
       }}
     >
-      {props.children}
+      { children }
     </SessionContext.Provider>
   )
 }

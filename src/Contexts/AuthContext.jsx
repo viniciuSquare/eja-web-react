@@ -13,7 +13,7 @@ export function AuthContextProvider(props) {
   }, [user])
     
   return(
-    <AuthContext.Provider value={{user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser }}>
       {props.children}
     </AuthContext.Provider>
   )

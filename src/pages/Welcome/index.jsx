@@ -6,12 +6,15 @@ import { useAuth } from "../../hooks/useAuth";
 export function Welcome() {
 
   const { setUser } = useAuth();
+  // TODO - IMPLEMENT SOCIAL AUTH
+  
   const mock_userData= {
     name: "Vinicius",
     logged: true,
   }
 
   function siginWithGoogle() {
+    // TODO -> SOCIAL LOGIN
     setUser(mock_userData)
   }
 

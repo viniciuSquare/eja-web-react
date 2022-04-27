@@ -3,7 +3,7 @@ import { StyledDashboard } from "./styled";
 import { FaUserAlt } from 'react-icons/fa'
 import { Link } from "react-router-dom";
 
-import { HelpButton } from "../../Components/HelpButton";
+import HelpButton from "../../Components/HelpButton";
 
 import booksIcon from '../../assets/icons/Books_Aulas_Icon.png'
 import abcIcon from '../../assets/icons/ABC_Alfabeto_Icon.png'
@@ -19,7 +19,7 @@ export function Dashboard() {
   },[])
 
   return(
-    <StyledDashboard>
+    <StyledDashboard id="dashboard">
       <div className="user-header">
         <div className="badge">
           <FaUserAlt size='2.2rem' color="white" />
