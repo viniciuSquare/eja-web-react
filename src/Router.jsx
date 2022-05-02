@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
+import { useAuth } from './hooks/useAuth'
+
 import { StyledApp } from './styled'
 
-import { Bloco } from './pages/Blocos'
+import { SessionContextProvider } from './Contexts/SessionContext'
 
-import { useAuth } from './hooks/useAuth'
+import { Bloco } from './pages/Blocos'
 import { Dashboard } from './pages/Dashboard'
 import { Welcome } from './pages/Welcome'
-import { SessionContextProvider } from './Contexts/SessionContext'
 
 function isAuthenticated(bool) {
   return bool;
@@ -25,15 +26,17 @@ function Router() {
           <Welcome />
           : 
           (
-            <SessionContextProvider>
+            <>
             {/* TODO - (SESSION) =>  setHelpAudio  */}  
-              <BrowserRouter>
+            <BrowserRouter>
+              <SessionContextProvider>
                 <Routes>
                   <Route path="/" element={<Dashboard/>} exact />
-                  <Route path='/bloco' element={<Bloco/>} />
+                  <Route path='/bloco' element={<Bloco/>}/>
                 </Routes>
-              </BrowserRouter>
-            </SessionContextProvider>
+              </SessionContextProvider>
+            </BrowserRouter>
+            </>
           )
         }
       </div>

@@ -19,7 +19,7 @@ export function SessionContextProvider({children}) {
   const [ currentState, setCurrentState ] = useState({...baseBlocoStructure});
   const [ activeInteraction, setActiveInteraction] = useState({});
 
-  const [helpAudio, setHelpAudio] = useState('Clique no desenho da casa para ir à página inicial')
+  const [helpAudio, setHelpAudio] = useState("Este é o DASHBOARD! Aqui é possível ver o progresso atual, entrar no alfabeto e nos blocos de aula.")
       
   // RETURN IF ALL THE INTERACTIONS ARE DONE;
   let interactionValidation = (currentState) => {
@@ -29,71 +29,98 @@ export function SessionContextProvider({children}) {
     return Object.values(interactionsState).every(interaction => interaction == true);
   } 
 
-  const updateActiveInteraction = (currentBlocoData, currentState) => {
+  const updateActiveInteraction = (currentState) => {
     if(currentBlocoData?.id) {
       console.log("CURRENT BLOCO ID: ", currentBlocoData?.id)
+      
       // DETERMINE WHICH IS THE ACTIVE INTERACTION
-      if(currentState?.aula == false){
-        setActiveInteraction({key: "aula", title: 'Aula', letraReferencia: currentBlocoData.letraReferencia,...currentBlocoData.aula})
+
+      if(currentState.aula == false){
+        setActiveInteraction({
+          blocoId: currentBlocoData.id , 
+          key: "aula", 
+          title: 'Aula', 
+          letraReferencia: currentBlocoData.letraReferencia,...currentBlocoData.aula
+        })
         console.log("aula IS ACTIVE")
       }
-      else if(currentState?.atividadeCompletar == false){
-        setActiveInteraction({key: "atividadeCompletar", title: 'Atividade Completar',letraReferencia: currentBlocoData.letraReferencia, ...currentBlocoData.atividadeCompletar})
+      else if(currentState.atividadeCompletar == false){
+        setActiveInteraction({
+          blocoId: currentBlocoData.id , 
+          key: "atividadeCompletar", 
+          title: 'Atividade Completar',
+          letraReferencia: currentBlocoData.letraReferencia, ...currentBlocoData.atividadeCompletar
+        })
         console.log("atividadeCompletar IS ACTIVE")
-        }
-      else if(currentState?.atividadeDigitar == false){
-        setActiveInteraction({key: "atividadeDigitar" , title: 'Atividade Digitar',letraReferencia: currentBlocoData.letraReferencia, ...currentBlocoData.atividadeDigitar})
+      }
+      else if(currentState.atividadeDigitar == false){
+        setActiveInteraction({
+          blocoId: currentBlocoData.id , 
+          key: "atividadeDigitar" , 
+          title: 'Atividade Digitar',
+          letraReferencia: currentBlocoData.letraReferencia, ...currentBlocoData.atividadeDigitar
+        })
         console.log("atividadeDigitar IS ACTIVE")
 
-      } else if(interactionValidation(currentState)) {
-        // TODO -> UPDATE CURRENT STATE BLOCO & getCurrentBlocoData();
-        let temp_currentState = {...baseBlocoStructure};
-        temp_currentState.id = currentState.id + 1;
-
-        console.log('temp currernt state: ', temp_currentState);
-
-        setIsLoading(true);
-        setCurrentState({...temp_currentState});
-
-        localStorage.setItem('bloco',JSON.stringify(temp_currentState));
-
       }
-
-      setIsLoading(false)
 
     } else {
       console.log("THERE IS NO CURRENT BLOCO");
     }
   }
   
-  const getCurrentBlocoData = async () => {
-    await api.get(`/?id=${currentState.id}`)
+  const getBlocoData = async (blocoId) => {
+    
+    await api.get(`/?id=${blocoId}`)
       .then( ({data}) => {
         if(currentBlocoData?.id != data.blocoData.id ) {
           setCurrentBlocoData(data.blocoData);
-          updateActiveInteraction(data.blocoData, currentState);
-        }
-      } )
-    // TODO -> IF THERE IS BLOCO DATA (INTERECTION COMPLETETION CASE), DO NOT SET BLOCO DATA.
+          setIsLoading(false);
+          console.log("BLOCO DATA FETCHED ",data.blocoData);
+        } else
+          console.debug("IS THE SAME BLOCO, WRONG CONDITION");
+      }).catch( error => { 
+        console.log("ERROR, TRYING AGAIN IN 3 SEC");
 
-    // return data.blocoData
+        setTimeout(() => {
+          getBlocoData(blocoId);
+        }, 3000)        
+      }
+
+      )
   }
 
   const nextInteractionHandler = () => {
     console.log("Next interaction handler")
-    setCurrentState({
-      ...currentState,
-      [activeInteraction.key] : true
-    })
 
-    const currentStateUpdatedValue = {
+    const updatedState = {
       ...currentState,
       [activeInteraction.key] : true
     }
     
-    updateActiveInteraction(currentBlocoData, currentStateUpdatedValue);
+    // IF UPDATED STATE IS A COMPLETE BLOCO STATE => ALL INTERACTIONS ARE DONE 
+    if(interactionValidation(updatedState)) {
+     
+      // TODO - CONGRATULATE USER
 
-    localStorage.setItem('bloco',JSON.stringify(currentStateUpdatedValue));
+      let newBloco_baseState = {...baseBlocoStructure};
+      newBloco_baseState.id = currentState.id + 1;
+
+      console.log('temp currernt state: ', newBloco_baseState);
+
+      setIsLoading(true);
+      getBlocoData(updatedState.id);
+
+      setCurrentState({...newBloco_baseState});
+      localStorage.setItem('bloco',JSON.stringify(newBloco_baseState));
+    } else {
+      setCurrentState(updatedState);
+      localStorage.setItem('bloco',JSON.stringify(updatedState));  
+    }
+
+    updateActiveInteraction(updatedState);
+    getBlocoData(updatedState.id);
+
   }
 
   // SET CURRENT STATE
@@ -114,6 +141,16 @@ export function SessionContextProvider({children}) {
     
   },[])
 
+  useEffect(()=>{
+    // IF STATE IS DEFINED & THERE`RE NO BLOCO
+    if(currentState.id && !currentBlocoData?.id) {
+      getBlocoData(currentState.id);
+    } else if ((currentState.id != activeInteraction.blocoId) || currentState[activeInteraction[key]]) {
+      console.debug("activeInteraction at current state",currentState[activeInteraction[key]]);
+      updateActiveInteraction(currentState);
+    }
+  },[currentState]);
+
   // UPDATE SCREEN HELP AUDIO ACORDING TO ACTIVE INTERACTION
   useEffect(()=>{
     console.log("ACTIVE INTERACTION UPDATED", activeInteraction);
@@ -125,20 +162,22 @@ export function SessionContextProvider({children}) {
   },[activeInteraction])
 
   return(
-    <SessionContext.Provider 
-      value={{
-        currentBlocoData, setCurrentBlocoData,
-        currentState, setCurrentState,
-        activeInteraction,
-        helpAudio, setHelpAudio,
-        // TODO
-        nextInteractionHandler, 
-        getCurrentBlocoData,
-        isLoading, setIsLoading
+    <>
+      <SessionContext.Provider 
+        value={{
+          currentBlocoData, setCurrentBlocoData,
+          currentState, setCurrentState,
+          activeInteraction,
+          helpAudio, setHelpAudio,
+          // TODO
+          nextInteractionHandler, 
+          getBlocoData,
+          isLoading, setIsLoading
 
-      }}
-    >
-      { children }
-    </SessionContext.Provider>
+        }}
+      >
+        { children }
+      </SessionContext.Provider>
+    </>
   )
 }

@@ -10,71 +10,58 @@ import { useSession } from "../../hooks/useSession"
 import { BlocoStyled } from "./styled"
 
 import { Aula, AtividadeCompletar, AtividadeDigitar } from "./Interactions";
+import { SessionContextProvider } from "../../Contexts/SessionContext";
 
 
 export function Bloco() {
-  // TODO -> GET CURRENT BLOCO & INTERACTIONS STATE 
-
   const { 
-    currentBlocoData, 
-    getCurrentBlocoData,
     currentState,
     activeInteraction,
-    nextInteractionHandler,
-    isLoading
+    isLoading,
+    nextInteractionHandler
   } = useSession()
 
-
-  // DETERMINE WHICH INTERACTION IS UNDONE
-  useEffect(async ()=>{
+  useEffect(()=>{
     console.log(currentState)
-    
-    await getCurrentBlocoData()
-
-    // TODO -> UPDATE localStorage STATE
   },[])
 
-  useEffect(()=>{
-    console.log("CURRENT STATE UPDATED");
-  },[currentState])
-
-  console.log("BLOCOS :", currentBlocoData);
   console.log("Current state :", currentState);
   console.log("ACTIVE INTERACTION", activeInteraction)
-
 
   return(
     <BlocoStyled>
       { !isLoading &&   
         <>
           <Header tipoInteracao={activeInteraction.title}/>
-            {!currentState?.aula ? 
-              <Aula 
-                letraRef={activeInteraction.letraReferencia} 
-                palavra={activeInteraction.palavra} 
-                urlImagem={activeInteraction.urlImagem} 
-              />
-
-            : !currentState?.atividadeCompletar ?
-                <AtividadeCompletar 
+            {
+              !currentState?.aula ? 
+                <Aula 
                   letraRef={activeInteraction.letraReferencia} 
                   palavra={activeInteraction.palavra} 
-                  palavraIncompleta={activeInteraction.palavraIncompleta} 
-                  urlImagem={activeInteraction.urlImagem}
-                  optionsList={activeInteraction.alternativas}
-                  nextInteractionHandler={nextInteractionHandler}
-                />              
-
-              : !currentState?.atividadeDigitar ?    
-                <AtividadeDigitar 
-                  letraRef={activeInteraction.letraReferencia} 
-                  palavra={activeInteraction.respostaCorreta} 
-                  urlImagem={activeInteraction.urlImagem}
-                  nextInteractionHandler={nextInteractionHandler}
+                  urlImagem={activeInteraction.urlImagem} 
                 />
-                : null
+
+              : !currentState?.atividadeCompletar ?
+                  <AtividadeCompletar 
+                    letraRef={activeInteraction.letraReferencia} 
+                    palavra={activeInteraction.palavra} 
+                    palavraIncompleta={activeInteraction.palavraIncompleta} 
+                    urlImagem={activeInteraction.urlImagem}
+                    optionsList={activeInteraction.alternativas}
+                    nextInteractionHandler={nextInteractionHandler}
+                  />              
+
+                : !currentState?.atividadeDigitar &&    
+                  <AtividadeDigitar 
+                    letraRef={activeInteraction.letraReferencia} 
+                    palavra={activeInteraction.respostaCorreta} 
+                    urlImagem={activeInteraction.urlImagem}
+                    nextInteractionHandler={nextInteractionHandler}
+                  />
             }
-          <NextButton updateStateHandler={nextInteractionHandler} />
+            { !currentState?.aula &&
+              <NextButton updateStateHandler={nextInteractionHandler} />
+            }
           <HelpButton/>
         </>
       }

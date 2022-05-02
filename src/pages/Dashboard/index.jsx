@@ -12,12 +12,6 @@ import { useSession } from "../../hooks/useSession";
 
 export function Dashboard() {
 
-  const {setHelpAudio} = useSession()
-  
-  useEffect(()=>{
-    setHelpAudio("Este é o DASHBOARD! Aqui é possível ver o progresso atual, entrar no alfabeto e nos blocos de aula.")
-  },[])
-
   return(
     <StyledDashboard id="dashboard">
       <div className="user-header">

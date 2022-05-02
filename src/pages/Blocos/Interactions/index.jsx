@@ -40,6 +40,8 @@ const Options = ({optionsList, nextInteractionHandler}) => {
     optionsList.map( (option,idx) => <button key={idx} onClick={() => validateAnswer(option.correta)}>{option.textoAlternativa}</button>)
   )
 }
+ 
+// TODO - INTERACTIONS VALIDATION
 
 export const AtividadeCompletar = ({urlImagem, letraRef, palavra, palavraCompleta, optionsList, nextInteractionHandler}) => {
   console.log("optionsList", optionsList)
@@ -79,6 +81,8 @@ export const Aula = ({urlImagem, letraRef, palavra, }) => {
 
 
 export const AtividadeDigitar = ({urlImagem, letraRef, palavra, nextInteractionHandler}) => {
+  let props = {urlImagem, letraRef, palavra}
+  console.debug("AtividadeDigitar", props)
 
   const [ formInputValue, setFormInputValue ] = useState('');
 
