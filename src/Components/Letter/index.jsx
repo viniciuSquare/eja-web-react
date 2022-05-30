@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import speak from "../../../../services/speak"
+import speak from "../../services/speak"
 
 export default function Letter({refLetter}) {
 

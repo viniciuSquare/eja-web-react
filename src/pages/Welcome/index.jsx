@@ -2,6 +2,7 @@ import { StyledWelcome } from "./styled";
 
 import googleIcon from '../../assets/icons/google-icon.svg'
 import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export function Welcome() {
 
@@ -13,9 +14,12 @@ export function Welcome() {
     logged: true,
   }
 
+  const navigate = useNavigate()
+
   function siginWithGoogle() {
     // TODO -> SOCIAL LOGIN
     setUser(mock_userData)
+    navigate('/')
   }
 
   return(

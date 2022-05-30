@@ -1,7 +1,7 @@
 import { StyledDashboard } from "./styled";
 
 import { FaUserAlt } from 'react-icons/fa'
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import HelpButton from "../../Components/HelpButton";
 
@@ -10,7 +10,13 @@ import abcIcon from '../../assets/icons/ABC_Alfabeto_Icon.png'
 import { useEffect } from "react/cjs/react.development";
 import { useSession } from "../../hooks/useSession";
 
-export function Dashboard() {
+export function Dashboard(props) {
+
+  const { setHelpAudio } = useSession();
+
+  // useEffect(()=>{
+  //   setHelpAudio()
+  // },[])
 
   return(
     <StyledDashboard id="dashboard">

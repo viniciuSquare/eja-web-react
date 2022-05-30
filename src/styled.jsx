@@ -28,6 +28,7 @@ export const StyledApp = styled.div`
       }
       flex-direction: column;
       justify-content: space-between;
+
     }
   }
 

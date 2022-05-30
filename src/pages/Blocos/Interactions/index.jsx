@@ -1,27 +1,66 @@
 import { useState, useEffect } from 'react/cjs/react.development';
 
-import { InteractionStyled } from './styled';
+import { useSession } from '../../../hooks/useSession';
 
-import { AiFillSound } from 'react-icons/ai'
-
-import Letter from '../components/Letter'
+import { AiFillSound } from 'react-icons/ai';
 
 import speak from "../../../services/speak";
 
-const Word = ({refWord}) => {
-  console.log(refWord)
+import { InteractionStyled } from './styled';
+
+import NextButton from '../components/NextButton';
+import Header from '../../../Components/Header';
+import HelpButton from '../../../Components/HelpButton';
+
+
+export function ActiveInteraction() {
   
-  refWord = refWord.split('');
+  const { 
+    currentState,
+    activeInteraction,
+    nextInteractionHandler,
+    is
+  } = useSession()
+
+
+  useEffect(()=>{
+    console.log(currentState)
+  },[])
+
+  console.log("Current state :", currentState);
+  console.log("ACTIVE INTERACTION", activeInteraction)
 
   return(
-    refWord.map( (letraRef, idx) => {
-      if(idx == 0)
-        letraRef = letraRef.toUpperCase()
-      else
-        letraRef = letraRef.toLowerCase()
-      
-      return <Letter key={idx} refLetter={letraRef}/>
-    })
+    <>
+      <Header tipoInteracao={activeInteraction.title}/>
+        {
+          !currentState?.aula ? 
+            <Aula 
+              letraRef={activeInteraction.letraReferencia} 
+              palavra={activeInteraction.palavra} 
+              urlImagem={activeInteraction.urlImagem} 
+            />
+
+          : !currentState?.atividadeCompletar ?
+              <AtividadeCompletar 
+                letraRef={activeInteraction.letraReferencia} 
+                palavra={activeInteraction.palavra} 
+                aulaIncompleta={activeInteraction.aulaIncompleta} 
+                urlImagem={activeInteraction.urlImagem}
+                optionsList={activeInteraction.alternativas}
+                nextInteractionHandler={nextInteractionHandler}
+              />              
+
+            : !currentState?.atividadeDigitar &&    
+              <AtividadeDigitar 
+                letraRef={activeInteraction.letraReferencia} 
+                palavra={activeInteraction.respostaCorreta} 
+                urlImagem={activeInteraction.urlImagem}
+                nextInteractionHandler={nextInteractionHandler}
+              />
+        }
+      <HelpButton/>
+    </>
   )
 }
 
@@ -58,12 +97,16 @@ export const AtividadeCompletar = ({urlImagem, letraRef, palavra, palavraComplet
       <div className="interaction-options">
         <Options optionsList={optionsList} nextInteractionHandler={nextInteractionHandler}/>
       </div>
+
+      <NextButton updateStateHandler={nextInteractionHandler} />
     </InteractionStyled>
   )
 }
 
 // TODO - STYLE MAIN LETTER
 export const Aula = ({urlImagem, letraRef, palavra, }) => {
+
+  const {nextInteractionHandler} = useSession();
 
   return(
     <div className="interaction">
@@ -74,11 +117,11 @@ export const Aula = ({urlImagem, letraRef, palavra, }) => {
         </button>
         <Word refWord={palavra} />
       </div>
+      <NextButton updateStateHandler={nextInteractionHandler} />
     </div>
 
   )
 }
-
 
 export const AtividadeDigitar = ({urlImagem, letraRef, palavra, nextInteractionHandler}) => {
   let props = {urlImagem, letraRef, palavra}
@@ -104,17 +147,19 @@ export const AtividadeDigitar = ({urlImagem, letraRef, palavra, nextInteractionH
 
       <div id="image-description" >
         <button onClick={()=>speak(palavra)} >
-          <AiFillSound size='2rem' color="gray"/>
+          <AiFillSound size='5rem' color="gray"/>
         </button>
-        <Word refWord={palavra} refLetter={letraRef}/>
+        
+        {/* <Word refWord={palavra} refLetter={letraRef}/> */}
+
+        <form action="submit" onChange={handleAtividadeDigitarForm}>
+          <fieldset >
+            <div className="input">
+              <input type="text"/>
+            </div>
+          </fieldset>
+        </form>
       </div>
-      <form action="submit" onChange={handleAtividadeDigitarForm}>
-        <fieldset >
-          <div className="input">
-            <input type="text"/>
-          </div>
-        </fieldset>
-      </form>
     </InteractionStyled>
   )
 }
