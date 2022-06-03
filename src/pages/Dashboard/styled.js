@@ -5,62 +5,6 @@ export const StyledDashboard = styled.div`
   flex-direction: column;
   align-items: center;
 
-  .user-header {
-    width: 90%;
-    padding: 0 1rem;
-    
-    height: 15rem;
-
-    display: flex;
-    align-items: center;
-
-    background: rgba(255, 255, 255, 0.7);
-    max-height: 100px;
-
-    border-radius: 8px;
-
-    box-shadow: 0px 8px 15px -15px rgba(0,0,0, 0.3);
-
-    .badge {
-      background: rgba(189, 205, 221, 0.93);
-
-      padding: 1.2rem;
-      margin: 0 1rem;
-      border-radius: 50%;
-    }
-
-    .user-n-progession {
-      display: flex;
-      flex-direction: column ;
-      justify-content: space-around;
-      
-      height: 100%;
-      width: 100%;
-      
-      #user-name {
-        /* STYLE USER NAME APPEREANCE */
-
-      }
-
-      .progession {
-        height: 0.6rem;
-        border-radius: 2px;
-  
-        background: #C4C4C4;
-        &::before { /* TODO - ATTEMPT TO CREATE PROGRESS BAR */
-          content: ' ';
-  
-          background-color: blue;
-          
-          height: 100% ;
-          height: 20px;
-          width: 20px;
-        }
-      }
-    }
-
-  }
-
   .routing-menu {    
     display: flex ;
 

@@ -4,20 +4,36 @@ export const AlfabetoStyled = styled.div`
   .lists {
     height: 100%;
     display: flex;
+
     flex-direction: column;
     justify-content: space-around ;
+
+    padding: 2rem 0 ;
+
+    gap: 6rem;
   }
 
   .list-box {
     display: flex;
     gap: 2rem;
 
-    height: 12rem;
+    height: 100%;
+    position: relative;
+
     border-radius: 16px;
 
     padding: 1.3rem 2rem;
 
     background-color: white;
+
+    border: 3px solid #dfdfdf;
+
+    .alphabet-legend {
+      position: absolute;
+      top: -1.5rem;
+
+      font-size: 2rem;
+    }
   }
 
   #image-description {
