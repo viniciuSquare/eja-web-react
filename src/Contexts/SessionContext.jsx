@@ -117,30 +117,33 @@ export function SessionContextProvider({children}) {
       ...currentState,
       [activeInteraction.key] : true
     }
-    
-    // IF UPDATED STATE IS A COMPLETE BLOCO STATE => ALL INTERACTIONS ARE DONE 
-    if(interactionValidation(updatedState)) {
-     
-      // TODO - CONGRATULATE USER
 
-      let newBloco_baseState = {...baseBlocoStructure};
-      newBloco_baseState.id = currentState.id + 1;
-
-      console.log('temp currernt state: ', newBloco_baseState);
-
-      setIsLoading(true);
+    setIsFeedbackShown(true);
+    setTimeout(()=>{
+      setIsFeedbackShown(false);
+      // IF UPDATED STATE IS A COMPLETE BLOCO STATE => ALL INTERACTIONS ARE DONE 
+      if(interactionValidation(updatedState)) {
+       
+        // TODO - CONGRATULATE USER
+  
+        let newBloco_baseState = {...baseBlocoStructure};
+        newBloco_baseState.id = currentState.id + 1;
+  
+        console.log('temp currernt state: ', newBloco_baseState);
+  
+        setIsLoading(true);
+        getBlocoData(updatedState.id);
+  
+        setCurrentState({...newBloco_baseState});
+        localStorage.setItem('bloco',JSON.stringify(newBloco_baseState));
+      } else {
+        setCurrentState(updatedState);
+        localStorage.setItem('bloco',JSON.stringify(updatedState));  
+      }
+  
+      updateActiveInteraction(updatedState);
       getBlocoData(updatedState.id);
-
-      setCurrentState({...newBloco_baseState});
-      localStorage.setItem('bloco',JSON.stringify(newBloco_baseState));
-    } else {
-      setCurrentState(updatedState);
-      localStorage.setItem('bloco',JSON.stringify(updatedState));  
-    }
-
-    updateActiveInteraction(updatedState);
-    getBlocoData(updatedState.id);
-
+    }, 6000)
   }
 
   
@@ -178,6 +181,7 @@ export function SessionContextProvider({children}) {
         console.log("FIRST TIME - UPDATING ACTIVE BLOCO")
         updateActiveInteraction(currentState);
       } else {
+        console.log("NEW UPDATE AI")
         // ON NEW BLOCO  
         if ( activeInteraction.blocoId != currentState.id ) {
           console.log("NEW BLOCO - UPDATING ACTIVE BLOCO")

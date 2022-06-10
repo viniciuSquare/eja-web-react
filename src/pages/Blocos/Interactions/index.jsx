@@ -19,49 +19,45 @@ export function ActiveInteraction() {
     currentState,
     activeInteraction,
     nextInteractionHandler,
-    is
   } = useSession()
-
-
-  useEffect(()=>{
-    console.log(currentState)
-  },[])
 
   console.log("Current state :", currentState);
   console.log("ACTIVE INTERACTION", activeInteraction)
 
-  return(
-    <>
-      <Header tipoInteracao={activeInteraction.title}/>
-        {
-          !currentState?.aula ? 
-            <Aula 
-              letraRef={activeInteraction.letraReferencia} 
-              palavra={activeInteraction.palavra} 
-              urlImagem={activeInteraction.urlImagem} 
-            />
-
-          : !currentState?.atividadeCompletar ?
-              <AtividadeCompletar 
+  if(activeInteraction?.blocoId > 0){
+    return (
+      <>
+        <Header tipoInteracao={activeInteraction.title}/>
+          {
+            !currentState?.aula ? 
+              <Aula 
                 letraRef={activeInteraction.letraReferencia} 
                 palavra={activeInteraction.palavra} 
-                aulaIncompleta={activeInteraction.aulaIncompleta} 
-                urlImagem={activeInteraction.urlImagem}
-                optionsList={activeInteraction.alternativas}
-                nextInteractionHandler={nextInteractionHandler}
-              />              
-
-            : !currentState?.atividadeDigitar &&    
-              <AtividadeDigitar 
-                letraRef={activeInteraction.letraReferencia} 
-                palavra={activeInteraction.respostaCorreta} 
-                urlImagem={activeInteraction.urlImagem}
-                nextInteractionHandler={nextInteractionHandler}
+                urlImagem={activeInteraction.urlImagem} 
               />
-        }
-      <HelpButton/>
-    </>
-  )
+
+            : !currentState?.atividadeCompletar ?
+                <AtividadeCompletar 
+                  letraRef={activeInteraction.letraReferencia} 
+                  palavra={activeInteraction.palavra} 
+                  aulaIncompleta={activeInteraction.aulaIncompleta} 
+                  urlImagem={activeInteraction.urlImagem}
+                  optionsList={activeInteraction.alternativas}
+                  nextInteractionHandler={nextInteractionHandler}
+                />              
+
+              : !currentState?.atividadeDigitar &&    
+                <AtividadeDigitar 
+                  letraRef={activeInteraction.letraReferencia} 
+                  palavra={activeInteraction.respostaCorreta} 
+                  urlImagem={activeInteraction.urlImagem}
+                  nextInteractionHandler={nextInteractionHandler}
+                />
+          }
+        <HelpButton/>
+      </>
+    )
+  } else return <h1>loading</h1>
 }
 
 const Options = ({optionsList, nextInteractionHandler}) => {

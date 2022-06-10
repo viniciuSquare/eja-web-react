@@ -14,7 +14,7 @@ export function Bloco() {
 
   return(
     <BlocoStyled>
-      { (!isLoading && activeInteraction?.blocoId) &&   
+      { !isLoading &&   
           <ActiveInteraction />
       }
       {

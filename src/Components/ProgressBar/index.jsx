@@ -1,14 +1,32 @@
-import { Background, Progress, StyledProgressBar } from "./styled";
-import { FaUserAlt } from 'react-icons/fa'
 import { useEffect, useState } from "react/cjs/react.development";
+
+import { Background, Progress, StyledProgressBar } from "./styled";
+
+import { FaUserAlt } from 'react-icons/fa';
+
+
+import api from '../../services/api';
+import { useSession } from '../../hooks/useSession';
+
+
+function getCurrentProgressPecentage(currentStateBlocoId, blocosHead) {
+  let currentProgressIndex = blocosHead.findIndex( blocoHead => blocoHead.id == currentStateBlocoId ) + 1;
+  let totalBlocosLength = blocosHead.length;
+
+  const currentPercentage = (currentProgressIndex/totalBlocosLength)*100
+
+  return currentPercentage;
+}
 
 export function ProgressBar() {
   const [ progressPercent, setProgressPercent ] = useState(0);
+  const { currentState } = useSession()
 
   useEffect(()=>{
-    setTimeout(()=>{
-      setProgressPercent(35);
-    },3000)
+    api.get().then(({data: result}) => {
+      const {blocosHead} = result;
+      setProgressPercent(getCurrentProgressPecentage(currentState.id, blocosHead))
+    })
   },[])
 
   return(
