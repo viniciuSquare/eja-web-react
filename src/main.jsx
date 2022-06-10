@@ -2,9 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { AuthContextProvider } from './Contexts/AuthContext'
-import { SessionContextProvider } from './Contexts/SessionContext'
-
-import "./global.css"
 
 import Router from './Router'
 

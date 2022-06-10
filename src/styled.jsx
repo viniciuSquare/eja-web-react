@@ -35,5 +35,52 @@ export const StyledApp = styled.div`
   .page-title {
     color: #1F4A75;
   }
+  
+  * {
+    padding: 0;
+    margin: 0;
 
+    box-sizing: border-box;
+
+    font-family: 'Lato', sans-serif;
+  }
+
+  body {
+    height: 100vh;
+    width: 100vw;
+
+    background-color: #ECF4FC;
+  }
+
+  /* BUTTON */
+  button {
+    cursor: pointer;
+    line-height: normal;
+    outline: none;
+    border: none;
+    background: transparent;
+  }
+
+  img {
+    object-fit: contain;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  #background {
+    z-index: -5;
+    position: absolute;
+    
+    height: 100vh;
+    width: 100%;
+
+    max-width: 700px;
+
+    object-fit: contain;
+
+    opacity: 0.3;
+  }
 `
