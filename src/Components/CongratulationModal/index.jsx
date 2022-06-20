@@ -1,8 +1,7 @@
 import {IoMdCheckmarkCircleOutline} from 'react-icons/io'
-import { useEffect } from 'react/cjs/react.development';
+import { useEffect } from 'react';
 import { useSession } from '../../hooks/useSession'
 import { FeedbackModalStyled } from './styled'
-
 
 
 export default function FeedbackModal({ feedbackText = "Concluído com sucesso" }) {

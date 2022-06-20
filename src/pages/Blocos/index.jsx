@@ -7,7 +7,6 @@ import FeedbackModal from "../../Components/CongratulationModal";
 
 export function Bloco() {
   const { 
-    activeInteraction,
     isLoading,
     isFeedbackShown
   } = useSession()

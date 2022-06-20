@@ -1,13 +1,18 @@
 import styled from "styled-components";
 
+export const ActiveInteractionStyled = styled.div`
+  flex: 1;
+`
+
 export const InteractionStyled = styled.div`
-  margin-bottom: 8% ;
+  margin-bottom: auto ;
   display: flex;
   flex-direction: column;
 
   height: 100%;
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
 
   fieldset {
     border: none;

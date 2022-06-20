@@ -10,12 +10,14 @@ export const AlfabetoStyled = styled.div`
 
     padding: 2rem 0 ;
 
-    gap: 6rem;
+    gap: 2rem;
   }
-
+  
   .list-box {
     display: flex;
-    gap: 2rem;
+    column-gap: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
 
     height: 100%;
     position: relative;

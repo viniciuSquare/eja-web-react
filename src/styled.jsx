@@ -13,45 +13,6 @@ export const StyledApp = styled.div`
 
   position: relative;
 
-  .page-content {
-    max-width: 800px;
-    width: 98%;
-
-    > div {
-      display: flex;
-  
-      height: 100%;
-      
-      &#dashboard {
-        padding: 4rem 1rem 5rem;
-
-      }
-      flex-direction: column;
-      justify-content: space-between;
-
-    }
-  }
-
-  .page-title {
-    color: #1F4A75;
-  }
-  
-  * {
-    padding: 0;
-    margin: 0;
-
-    box-sizing: border-box;
-
-    font-family: 'Lato', sans-serif;
-  }
-
-  body {
-    height: 100vh;
-    width: 100vw;
-
-    background-color: #ECF4FC;
-  }
-
   /* BUTTON */
   button {
     cursor: pointer;
@@ -81,6 +42,29 @@ export const StyledApp = styled.div`
 
     object-fit: contain;
 
-    opacity: 0.3;
+    opacity: 0.03;
   }
+
+  .page-content {
+    max-width: 800px;
+    width: 98%;
+
+    > div {
+      display: flex;
+  
+      height: 100%;
+      
+      &#dashboard {
+        padding: 4rem 1rem 5rem;
+
+      }
+      flex-direction: column;
+      justify-content: space-between;
+
+    }
+  }
+
+  .page-title {
+    color: #1F4A75;
+  }  
 `

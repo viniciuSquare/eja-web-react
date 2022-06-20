@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react/cjs/react.development';
+import { useState, useEffect } from 'react';
 
 import { useSession } from '../../../hooks/useSession';
 
@@ -6,11 +6,13 @@ import { AiFillSound } from 'react-icons/ai';
 
 import speak from "../../../services/speak";
 
-import { InteractionStyled } from './styled';
+import { InteractionStyled, ActiveInteractionStyled } from './styled';
 
 import NextButton from '../components/NextButton';
 import Header from '../../../Components/Header';
 import HelpButton from '../../../Components/HelpButton';
+import Word from '../../../Components/Word';
+import { useLocation } from 'react-router-dom';
 
 
 export function ActiveInteraction() {
@@ -19,14 +21,24 @@ export function ActiveInteraction() {
     currentState,
     activeInteraction,
     nextInteractionHandler,
+    setHelpAudio
   } = useSession()
+  
+  const location = useLocation();
 
-  console.log("Current state :", currentState);
-  console.log("ACTIVE INTERACTION", activeInteraction)
+  useEffect(()=>{
+    console.log("Current state :", currentState);
+    console.log("ACTIVE INTERACTION", activeInteraction)
+
+    if( location.pathname != '/' && activeInteraction.audio) {
+      setHelpAudio(activeInteraction.audio);
+    }
+
+  }, [])
 
   if(activeInteraction?.blocoId > 0){
     return (
-      <>
+      <ActiveInteractionStyled>
         <Header tipoInteracao={activeInteraction.title}/>
           {
             !currentState?.aula ? 
@@ -39,7 +51,7 @@ export function ActiveInteraction() {
             : !currentState?.atividadeCompletar ?
                 <AtividadeCompletar 
                   letraRef={activeInteraction.letraReferencia} 
-                  palavra={activeInteraction.palavra} 
+                  palavra={activeInteraction.palavraIncompleta} 
                   aulaIncompleta={activeInteraction.aulaIncompleta} 
                   urlImagem={activeInteraction.urlImagem}
                   optionsList={activeInteraction.alternativas}
@@ -55,7 +67,7 @@ export function ActiveInteraction() {
                 />
           }
         <HelpButton/>
-      </>
+      </ActiveInteractionStyled>
     )
   } else return <h1>loading</h1>
 }
@@ -78,14 +90,14 @@ const Options = ({optionsList, nextInteractionHandler}) => {
  
 // TODO - INTERACTIONS VALIDATION
 
-export const AtividadeCompletar = ({urlImagem, letraRef, palavra, palavraCompleta, optionsList, nextInteractionHandler}) => {
+export const AtividadeCompletar = ({urlImagem, letraRef, palavra, palavraIncompleta, optionsList, nextInteractionHandler}) => {
   console.log("optionsList", optionsList)
   
   return(
     <InteractionStyled className="interaction">
       <img src={urlImagem} />
       <div id="image-description" >
-        <button onClick={()=>speak(palavraCompleta)} >
+        <button onClick={()=>speak(palavra)} >
           <AiFillSound size='2rem' color="gray"/>
         </button>
         <Word refWord={palavra} refLetter={letraRef} />
@@ -93,8 +105,6 @@ export const AtividadeCompletar = ({urlImagem, letraRef, palavra, palavraComplet
       <div className="interaction-options">
         <Options optionsList={optionsList} nextInteractionHandler={nextInteractionHandler}/>
       </div>
-
-      <NextButton updateStateHandler={nextInteractionHandler} />
     </InteractionStyled>
   )
 }
@@ -105,7 +115,7 @@ export const Aula = ({urlImagem, letraRef, palavra, }) => {
   const {nextInteractionHandler} = useSession();
 
   return(
-    <div className="interaction">
+    <InteractionStyled className="interaction">
       <img src={urlImagem} />
       <div id="image-description" >
         <button onClick={()=>speak(palavra)} >
@@ -114,7 +124,7 @@ export const Aula = ({urlImagem, letraRef, palavra, }) => {
         <Word refWord={palavra} />
       </div>
       <NextButton updateStateHandler={nextInteractionHandler} />
-    </div>
+    </InteractionStyled>
 
   )
 }
@@ -127,8 +137,7 @@ export const AtividadeDigitar = ({urlImagem, letraRef, palavra, nextInteractionH
 
   useEffect(()=>{
     if(formInputValue == palavra.toLowerCase()) {
-      alert("Acertou!!!!")
-  
+      nextInteractionHandler()
     }
   },[formInputValue])
 
@@ -148,7 +157,7 @@ export const AtividadeDigitar = ({urlImagem, letraRef, palavra, nextInteractionH
         
         {/* <Word refWord={palavra} refLetter={letraRef}/> */}
 
-        <form action="submit" onChange={handleAtividadeDigitarForm}>
+        <form onChange={handleAtividadeDigitarForm}>
           <fieldset >
             <div className="input">
               <input type="text"/>

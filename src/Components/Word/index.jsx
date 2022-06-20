@@ -1,6 +1,6 @@
-import { Letter } from '../Letter'
+import Letter from '../Letter'
 
-export const Word = ({refWord}) => {
+export default function Word({refWord}) {
   console.log(refWord)
   
   refWord = refWord.split('');

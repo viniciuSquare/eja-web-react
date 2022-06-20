@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react/cjs/react.development';
+import { useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 
 import api from '../services/api'
@@ -18,13 +18,7 @@ export function SessionContextProvider({children}) {
   }
 
   const [ currentBlocoData, setCurrentBlocoData ] = useState({});
-  const [ 
-    currentState, 
-    setCurrentState 
-  ] = useState(JSON.parse(localStorage.getItem("bloco")) 
-    ? JSON.parse(localStorage.getItem("bloco")) 
-    : {...baseBlocoStructure} );
-  
+  const [ currentState, setCurrentState ] = useState({});
 
   const [ activeInteraction, setActiveInteraction] = useState({});
 
@@ -39,6 +33,15 @@ export function SessionContextProvider({children}) {
   useEffect(()=>{
     if(!user.logged)
       navigate('/login');
+    if(!localStorage.getItem("bloco"))
+      localStorage.setItem('bloco', JSON.stringify(currentState))
+
+    if(currentState.id == undefined ) {
+      console.log("VALIDATING CS")
+      JSON.parse(localStorage.getItem("bloco")).id != undefined 
+      ? setCurrentState(JSON.parse(localStorage.getItem("bloco")) )
+      : setCurrentState({...baseBlocoStructure })
+    }
   },[])
    
   // RETURN IF ALL THE INTERACTIONS ARE DONE;
@@ -49,7 +52,7 @@ export function SessionContextProvider({children}) {
     return Object.values(interactionsState).every(interaction => interaction == true);
   } 
 
-  const updateActiveInteraction = (currentState) => {
+  function updateActiveInteraction (currentState) {
     if(currentBlocoData?.id) {
       console.log("CURRENT BLOCO ID: ", currentBlocoData?.id)
       
@@ -88,6 +91,9 @@ export function SessionContextProvider({children}) {
     } else {
       console.log("THERE IS NO CURRENT BLOCO");
     }
+    console.log("SAIU UPDATE AI")
+    if(isLoading)
+      setIsLoading(false);
   }
   
   const getBlocoData = async (blocoId) => {
@@ -95,19 +101,19 @@ export function SessionContextProvider({children}) {
       .then( ({data}) => {
         if(currentBlocoData?.id != data.blocoData.id ) {
           setCurrentBlocoData(data.blocoData);
-          setIsLoading(false);
           console.log("BLOCO DATA FETCHED ",data.blocoData);
         } else
           console.debug("IS THE SAME BLOCO, WRONG CONDITION");
+
+        setIsLoading(false);
       }).catch( error => { 
+        console.log(error)
         console.log("ERROR, TRYING AGAIN IN 3 SEC");
 
-        setTimeout(() => {
-          getBlocoData(blocoId);
-        }, 3000)        
-      }
-
-      )
+        // setTimeout(() => {
+        //   getBlocoData(blocoId);
+        // }, 3000)        
+      })
   }
 
   const nextInteractionHandler = () => {
@@ -121,9 +127,9 @@ export function SessionContextProvider({children}) {
     setIsFeedbackShown(true);
     setTimeout(()=>{
       setIsFeedbackShown(false);
+      setIsLoading(true)
       // IF UPDATED STATE IS A COMPLETE BLOCO STATE => ALL INTERACTIONS ARE DONE 
       if(interactionValidation(updatedState)) {
-       
         // TODO - CONGRATULATE USER
   
         let newBloco_baseState = {...baseBlocoStructure};
@@ -131,53 +137,48 @@ export function SessionContextProvider({children}) {
   
         console.log('temp currernt state: ', newBloco_baseState);
   
-        setIsLoading(true);
         getBlocoData(updatedState.id);
   
         setCurrentState({...newBloco_baseState});
         localStorage.setItem('bloco',JSON.stringify(newBloco_baseState));
       } else {
+        console.log("NEW CS", updatedState);
         setCurrentState(updatedState);
         localStorage.setItem('bloco',JSON.stringify(updatedState));  
       }
   
       updateActiveInteraction(updatedState);
-      getBlocoData(updatedState.id);
-    }, 6000)
+      setIsLoading(false);
+
+    }, 3500)
   }
 
-  
-  useEffect( async () =>{
+  useEffect( () =>{
+    console.log(isNaN(currentBlocoData?.id), isNaN(currentState?.id))
+
     // IF STATE IS DEFINED & THERE`RE NO BLOCO
-    if(currentState.id && !currentBlocoData?.id) {
-      await getBlocoData(currentState.id);
+    if(isNaN(currentBlocoData?.id) && !isNaN(currentState?.id) ) {
+      getBlocoData(currentState.id);
       console.log("FETCHING BLOCO");
     } 
-    // else if ( (currentState.id != activeInteraction.blocoId) || currentState[activeInteraction[key]]) {
-    //   console.debug("activeInteraction at current state",currentState[activeInteraction[key]]);
-    //   updateActiveInteraction(currentState);
-    // }
-    console.log("changed CS ", activeInteraction.blocoId)
+    if ( !isNaN(currentState?.id) && ((currentState.id != activeInteraction.blocoId) || currentState[activeInteraction[activeInteraction.key]])) {
+      console.debug("activeInteraction at current state",currentState[activeInteraction[activeInteraction.key]]);
+      updateActiveInteraction(currentState);
+    }
+    console.log("changed CS ", currentState, activeInteraction.blocoId)
   },[currentState]);
   
-  const location = useLocation();
 
   // UPDATE SCREEN HELP AUDIO ACORDING TO ACTIVE INTERACTION
   useEffect(()=>{
     console.log("ACTIVE INTERACTION UPDATED", activeInteraction);
-    
-    console.log(location)
-
-    if( location.pathname != '/' && activeInteraction.audio) {
-      setHelpAudio(activeInteraction.audio);
-    }
 
   },[activeInteraction])
 
   useEffect(()=>{
     if(currentBlocoData.id) {
       // FIRST TIME
-      if( !activeInteraction.blocoId ) {
+      if(!activeInteraction.blocoId ) {
         console.log("FIRST TIME - UPDATING ACTIVE BLOCO")
         updateActiveInteraction(currentState);
       } else {
