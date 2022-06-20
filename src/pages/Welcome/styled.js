@@ -2,8 +2,11 @@ import styled from 'styled-components'
 
 export const StyledWelcome = styled.div`
   /* background: gray; */
-  
-  .login {
+  position: relative;
+
+  padding: 5rem;
+
+  .login-button {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -34,6 +37,5 @@ export const StyledWelcome = styled.div`
       }
     }
   }
-
 
 `

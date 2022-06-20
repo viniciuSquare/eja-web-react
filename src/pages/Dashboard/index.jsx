@@ -3,24 +3,19 @@ import { StyledDashboard } from "./styled";
 import { Link } from "react-router-dom";
 
 import HelpButton from "../../Components/HelpButton";
+import ExitButton from "../../Components/ExitButton";
 
 import booksIcon from '../../assets/icons/Books_Aulas_Icon.png'
 import abcIcon from '../../assets/icons/ABC_Alfabeto_Icon.png'
 
-import { useSession } from "../../hooks/useSession";
 import { ProgressBar } from "../../Components/ProgressBar";
 
-export function Dashboard(props) {
-
-  const { setHelpAudio } = useSession();
-
-  // useEffect(()=>{
-  //   setHelpAudio()
-  // },[])
+export function Dashboard() {
 
   return(
     <StyledDashboard id="dashboard">
       <ProgressBar />
+      <ExitButton/>
       <div className="routing-menu">
         <Link to="alfabeto">
           <img src={abcIcon} alt="menu icon" />
@@ -34,8 +29,7 @@ export function Dashboard(props) {
       <footer>
         <HelpButton/>
       </footer>
-
-      
+           
     </StyledDashboard>
   )
 

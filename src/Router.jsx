@@ -8,32 +8,31 @@ import { Welcome } from "./pages/Welcome";
 import { Dashboard } from "./pages/Dashboard";
 import { Bloco } from "./pages/Blocos";
 import { Alfabeto } from "./pages/Alfabeto";
-
-function isAuthenticated(bool) {
-  return bool;
-}
+import { AuthContextProvider } from "./Contexts/AuthContext";
 
 function Router() {
   return (
     <StyledApp>
       <img
         id="background"
-        src="./src/assets/images/alma-logo.png"
+        src={require("./assets/images/alma-logo.png")}
         alt="Logo Alma"
       />
       <div className="page-content">
         {/* TODO - (SESSION) =>  setHelpAudio  */}
         <BrowserRouter>
-          <Routes>
-            <Route path="login" element={<Welcome />} exact />
-          </Routes>
-          <SessionContextProvider>
+          <AuthContextProvider>
             <Routes>
-              <Route path="/" element={<Dashboard />} exact />
-              <Route path="/alfabeto" element={<Alfabeto />} exact />
-              <Route path="/bloco" element={<Bloco />} />
+              <Route path="login" element={<Welcome />} exact />
             </Routes>
-          </SessionContextProvider>
+            <SessionContextProvider>
+              <Routes>
+                <Route path="/" element={<Dashboard />} exact />
+                <Route path="/alfabeto" element={<Alfabeto />} exact />
+                <Route path="/bloco" element={<Bloco />} />
+              </Routes>
+            </SessionContextProvider>
+          </AuthContextProvider>
         </BrowserRouter>
       </div>
     </StyledApp>

@@ -95,7 +95,7 @@ export const AtividadeCompletar = ({urlImagem, letraRef, palavra, palavraIncompl
   
   return(
     <InteractionStyled className="interaction">
-      <img src={urlImagem} />
+      <img src={require(`../../../assets/images/bloco/${urlImagem}`)} />
       <div id="image-description" >
         <button onClick={()=>speak(palavra)} >
           <AiFillSound size='2rem' color="gray"/>
@@ -116,7 +116,7 @@ export const Aula = ({urlImagem, letraRef, palavra, }) => {
 
   return(
     <InteractionStyled className="interaction">
-      <img src={urlImagem} />
+      <img src={require(`../../../assets/images/bloco/${urlImagem}`)} />
       <div id="image-description" >
         <button onClick={()=>speak(palavra)} >
           <AiFillSound size='2rem' color="gray"/>
@@ -148,7 +148,7 @@ export const AtividadeDigitar = ({urlImagem, letraRef, palavra, nextInteractionH
 
   return(
     <InteractionStyled className="interaction">
-      <img src={urlImagem} />
+      <img src={require(`../../../assets/images/bloco/${urlImagem}`)} />
 
       <div id="image-description" >
         <button onClick={()=>speak(palavra)} >
