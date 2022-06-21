@@ -50,11 +50,24 @@ export const StyledWelcome = styled.div`
     Tablets, Ipads (portrait)
     Screen = B/w 768px to 1024px
   */
+  @media (max-height: 750px) {
+    padding: 3rem ;
+  }
   @media (max-width: 650px) {
+
     #login-background {
       max-width: 460px
     }
-
+  }
+  @media (max-width: 485px) {
+    #login-background {
+      max-width: 360px
+    }
+  }
+  @media (max-width: 371px) {    
+    #login-background {
+      max-width: 320px
+    }
   }
 
 `

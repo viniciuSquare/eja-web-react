@@ -26,7 +26,7 @@ export function AuthContextProvider(props) {
     const localStorageUserData = JSON.stringify(user);
     localStorage.setItem('user', localStorageUserData);
 
-    if( user.logged && location.pathname == "/login" ) {
+    if( user.logged != undefined && location.pathname == "/login" ) {
       navigate('/');
     }
   }, [user])
