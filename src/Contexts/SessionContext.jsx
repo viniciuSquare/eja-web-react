@@ -141,7 +141,7 @@ export function SessionContextProvider({children}) {
   useEffect(()=>{
     if(!user.logged)
       navigate('/login');
-    if(isNaN(JSON.parse(localStorage.getItem("bloco")).id))
+    if(localStorage.getItem("bloco") == undefined)
       localStorage.setItem('bloco', JSON.stringify(currentState))
 
     if(currentState.id == undefined ) {
