@@ -16,7 +16,7 @@ export function AuthContextProvider(props) {
   useEffect(() => {
     const localstorageUserData = JSON.parse(localStorage.getItem('user'))
     console.log(user);
-    if( user.logged == undefined && localstorageUserData.logged ) {
+    if( user.logged == undefined && localstorageUserData?.logged ) {
       setUser(localstorageUserData);
     }
 

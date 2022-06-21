@@ -26,7 +26,6 @@ export function SessionContextProvider({children}) {
 
   const [ helpAudio, setHelpAudio ] = useState("Este é o DASHBOARD! Aqui é possível ver o progresso atual, conhecer letras e números no alfatebeto ou aprender com as aulas.")
 
-
   const { user } = useAuth()
   const navigate = useNavigate()       
 
@@ -142,7 +141,7 @@ export function SessionContextProvider({children}) {
   useEffect(()=>{
     if(!user.logged)
       navigate('/login');
-    if(!localStorage.getItem("bloco"))
+    if(isNaN(JSON.parse(localStorage.getItem("bloco")).id))
       localStorage.setItem('bloco', JSON.stringify(currentState))
 
     if(currentState.id == undefined ) {
