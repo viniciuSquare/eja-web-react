@@ -7,6 +7,7 @@ import { FaUserAlt } from 'react-icons/fa';
 
 import api from '../../services/api';
 import { useSession } from '../../hooks/useSession';
+import { useAuth } from "../../hooks/useAuth";
 
 
 function getCurrentProgressPecentage(currentStateBlocoId, blocosHead) {
@@ -20,14 +21,19 @@ function getCurrentProgressPecentage(currentStateBlocoId, blocosHead) {
 
 export function ProgressBar() {
   const [ progressPercent, setProgressPercent ] = useState(0);
+
   const { currentState } = useSession()
+  const { user } = useAuth()
 
   useEffect(()=>{
-    api.get().then(({data: result}) => {
-      const {blocosHead} = result;
-      setProgressPercent(getCurrentProgressPecentage(currentState.id, blocosHead))
-    })
-  },[])
+    if(!isNaN(currentState.id)) {
+      api.get().then(({data: result}) => {
+        const {blocosHead} = result;
+        setProgressPercent(getCurrentProgressPecentage(currentState.id, blocosHead))
+        console.log(currentState.id, blocosHead)
+      })
+    }
+  },[currentState])
 
   return(
     <StyledProgressBar className="user-header">
@@ -36,7 +42,7 @@ export function ProgressBar() {
       </div>
       <div className="user-n-progession">
         {/* TODO - DYNAMIC HANDLING USER */}
-        <h2 id="user-name" >Seu João</h2>
+        <h2 id="user-name" >{user.name}</h2>
         <div className="progession">
           <Background id="progress-bar-bg" />
           <Progress id="progress-bar" percent={progressPercent} />

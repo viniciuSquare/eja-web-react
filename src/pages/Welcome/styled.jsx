@@ -6,6 +6,14 @@ export const StyledWelcome = styled.div`
 
   padding: 5rem;
 
+  max-width: 800px ;
+  margin: auto ;
+
+  #login-background {
+    max-width: 580px ;
+    align-self: center ;
+  }
+
   .login-button {
     width: 100%;
     display: flex;
@@ -36,6 +44,17 @@ export const StyledWelcome = styled.div`
         margin: 0 1rem;
       }
     }
+  }
+
+  /*
+    Tablets, Ipads (portrait)
+    Screen = B/w 768px to 1024px
+  */
+  @media (max-width: 650px) {
+    #login-background {
+      max-width: 460px
+    }
+
   }
 
 `

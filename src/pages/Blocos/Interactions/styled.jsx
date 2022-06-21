@@ -1,18 +1,36 @@
 import styled from "styled-components";
 
 export const ActiveInteractionStyled = styled.div`
-  flex: 1;
+  /* flex: 1; */
 `
 
 export const InteractionStyled = styled.div`
-  margin-bottom: auto ;
-  display: flex;
+  /* margin-bottom: auto ; */
   flex-direction: column;
 
   height: 100%;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+
+  img {
+    max-height: 50vh;
+    object-fit: contain ;
+  }
+
+  #image-description {
+    display: flex ;
+    gap: 0.5rem;
+
+    justify-content: space-around;
+    align-items: center;
+    max-width: 450px ;
+    width: 100%;
+
+    button {
+      margin: 0 1rem ;
+    }
+  }
 
   fieldset {
     border: none;

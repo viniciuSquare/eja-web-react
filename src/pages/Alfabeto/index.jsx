@@ -12,7 +12,7 @@ export function Alfabeto() {
     numbers.push(num);
   }
   return(
-    <AlfabetoStyled>
+    <AlfabetoStyled id="alphabet">
       <Header tipoInteracao="Alfabeto" /> 
       <div className="lists">
         <div className="list-box lower-case">

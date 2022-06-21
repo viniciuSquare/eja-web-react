@@ -28,29 +28,7 @@ export function SessionContextProvider({children}) {
 
 
   const { user } = useAuth()
-  const navigate = useNavigate()    
-
-  useEffect(()=>{
-    if(!user.logged)
-      navigate('/login');
-    if(!localStorage.getItem("bloco"))
-      localStorage.setItem('bloco', JSON.stringify(currentState))
-
-    if(currentState.id == undefined ) {
-      console.log("VALIDATING CS")
-      JSON.parse(localStorage.getItem("bloco")).id != undefined 
-      ? setCurrentState(JSON.parse(localStorage.getItem("bloco")) )
-      : setCurrentState({...baseBlocoStructure })
-    }
-  },[])
-   
-  // RETURN IF ALL THE INTERACTIONS ARE DONE;
-  let interactionValidation = (currentState) => {
-    let interactionsState = { ...currentState }
-    delete interactionsState.id;
-
-    return Object.values(interactionsState).every(interaction => interaction == true);
-  } 
+  const navigate = useNavigate()       
 
   function updateActiveInteraction (currentState) {
     if(currentBlocoData?.id) {
@@ -152,6 +130,28 @@ export function SessionContextProvider({children}) {
 
     }, 3500)
   }
+
+  // RETURN IF ALL THE INTERACTIONS ARE DONE;
+  let interactionValidation = (currentState) => {
+    let interactionsState = { ...currentState }
+    delete interactionsState.id;
+
+    return Object.values(interactionsState).every(interaction => interaction == true);
+  }   
+
+  useEffect(()=>{
+    if(!user.logged)
+      navigate('/login');
+    if(!localStorage.getItem("bloco"))
+      localStorage.setItem('bloco', JSON.stringify(currentState))
+
+    if(currentState.id == undefined ) {
+      console.log("VALIDATING CS")
+      JSON.parse(localStorage.getItem("bloco")).id != undefined 
+      ? setCurrentState(JSON.parse(localStorage.getItem("bloco")) )
+      : setCurrentState({...baseBlocoStructure })
+    }
+  },[])
 
   useEffect( () =>{
     console.log(isNaN(currentBlocoData?.id), isNaN(currentState?.id))

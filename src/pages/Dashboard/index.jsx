@@ -15,7 +15,6 @@ export function Dashboard() {
   return(
     <StyledDashboard id="dashboard">
       <ProgressBar />
-      <ExitButton/>
       <div className="routing-menu">
         <Link to="alfabeto">
           <img src={abcIcon} alt="menu icon" />
@@ -28,6 +27,7 @@ export function Dashboard() {
       </div>
       <footer>
         <HelpButton/>
+        <ExitButton/>
       </footer>
            
     </StyledDashboard>

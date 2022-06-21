@@ -5,6 +5,9 @@ export const StyledDashboard = styled.div`
   flex-direction: column;
   align-items: center;
 
+  max-width: 800px ;
+  margin: auto;
+
   .routing-menu {    
     display: flex ;
 

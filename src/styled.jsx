@@ -45,9 +45,13 @@ export const StyledApp = styled.div`
     opacity: 0.03;
   }
 
+  .page-title {
+    color: #1F4A75;
+    align-self: flex-start;
+  }  
+
   .page-content {
-    max-width: 800px;
-    width: 98%;
+    width: 100%;
 
     > div {
       display: flex;
@@ -58,13 +62,12 @@ export const StyledApp = styled.div`
         padding: 4rem 1rem 5rem;
 
       }
+      
       flex-direction: column;
       justify-content: space-between;
 
     }
   }
 
-  .page-title {
-    color: #1F4A75;
-  }  
+
 `
