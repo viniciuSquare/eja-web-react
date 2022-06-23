@@ -16,7 +16,7 @@ export function AuthContextProvider(props) {
   useEffect(() => {
     const localstorageUserData = JSON.parse(localStorage.getItem('user'))
     console.log(user);
-    if( user.logged == undefined && localstorageUserData == null ) {
+    if( user && localstorageUserData == null ) {
       setUser(localstorageUserData);
     }
 
@@ -26,18 +26,16 @@ export function AuthContextProvider(props) {
     const localStorageUserData = JSON.stringify(user);
     localStorage.setItem('user', localStorageUserData);
 
-    if( user.logged != undefined && location.pathname == "/login" ) {
+    if( user && location.pathname == "/login" ) {
       navigate('/');
     }
   }, [user])
   
-
-
   async function signInWithGoogle() {
     const auth = getAuth();
     signInWithPopup(auth, provider).then(({user: googleUser}) => {
       console.log(googleUser)
-      const { displayName, photoUrl } = googleUser;
+      const { displayName, photoURL } = googleUser;
       
       if( !displayName ) {
         console.log("NO USER DISPLAY NAME");
@@ -45,7 +43,7 @@ export function AuthContextProvider(props) {
         setUser({
           logged: true,
           name: displayName,
-          photoUrl: photoUrl || ''
+          photoUrl: photoURL || ''
         })
       }
     })

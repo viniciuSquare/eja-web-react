@@ -24,6 +24,8 @@ export const StyledApp = styled.div`
 
   img {
     object-fit: contain;
+
+    max-width: 90% ;
   }
 
   a {

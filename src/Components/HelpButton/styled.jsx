@@ -18,6 +18,9 @@ export const FloattingButtonStyled = styled.div`
       opacity: 0.8;
 
     }
+  }
 
+  @media (max-width: 680px) {
+    width: 4rem ;
   }
 `

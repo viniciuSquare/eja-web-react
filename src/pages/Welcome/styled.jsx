@@ -10,7 +10,8 @@ export const StyledWelcome = styled.div`
   margin: auto ;
 
   #login-background {
-    max-width: 580px ;
+    width: 580px ;
+    max-width: 90% ;
     align-self: center ;
   }
 

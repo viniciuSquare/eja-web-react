@@ -30,15 +30,22 @@ export const StyledDashboard = styled.div`
 
       box-shadow: 0px 4px 52px -70px rgba(255, 255, 255, 0.25);
       border-radius: 1.5rem;
-
-      /* img {
-        margin: 0 2.5rem;
-      } */
-
-      h3 {
-        font-size: 3rem;
-
-      }
     }
+  }
+
+  @media (max-width: 485px) {
+    font-size: 12px ;
+    a img {
+      width: 4rem ;
+    }
+    h3 {
+      font-size: 2rem ;
+    }
+  }
+  @media (min-width: 486px) {
+    h3 {
+      font-size: 3rem ;
+    }
+    
   }
 `

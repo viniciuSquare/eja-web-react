@@ -1,7 +1,13 @@
 import styled from "styled-components";
 
 export const ActiveInteractionStyled = styled.div`
-  /* flex: 1; */
+  @media (max-width: 485px) {
+    /* font-size: 12px ; */
+
+    h3 {
+      font-size: 2rem ;
+    }
+  }
 `
 
 export const InteractionStyled = styled.div`
@@ -58,19 +64,33 @@ export const InteractionStyled = styled.div`
   /* ATIVIDADE COMPLETAR */
   .interaction-options {
     display: flex;
-    justify-content: center;
-    gap: 5rem;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 450px;
     
     button {
-      height: 80px;
-      width: 120px;
-
       background-color: blue;
       color: white;
       border-radius: 1rem;
-
-      font-size: 1.4rem;
+    }
+    
+    @media (max-width: 485px) {
+      width: 70%;
+      button {
+        font-size: 16px ;
+        height: 3rem;
+        width: 3rem;
+      }
+    }
+    
+    @media (min-width: 486px) {
+      button {
+        font-size: 1.4rem ;
+        height: 4rem;
+        width: 7rem;
+        
+      }
     }
   }
-
+  
 `

@@ -8,7 +8,17 @@ export const HeaderStyled = styled.header`
   align-items: center;
   justify-content: space-between;
 
-  padding: 2rem ;
+  padding: 1.3rem 2rem;
 
   width: 100%;
+
+  @media (max-width: 485px) {
+    font-size: 12px ;
+    a img {
+      width: 4rem ;
+    }
+    h3 {
+      font-size: 2rem ;
+    }
+  }
 `

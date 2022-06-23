@@ -87,8 +87,6 @@ const Options = ({optionsList, nextInteractionHandler}) => {
     optionsList.map( (option,idx) => <button key={idx} onClick={() => validateAnswer(option.correta)}>{option.textoAlternativa}</button>)
   )
 }
- 
-// TODO - INTERACTIONS VALIDATION
 
 export const AtividadeCompletar = ({urlImagem, letraRef, palavra, palavraIncompleta, optionsList, nextInteractionHandler}) => {
   console.log("optionsList", optionsList)
