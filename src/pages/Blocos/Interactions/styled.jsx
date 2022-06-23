@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const ActiveInteractionStyled = styled.div`
+  height: 80%;
   @media (max-width: 485px) {
     /* font-size: 12px ; */
 
@@ -20,6 +21,8 @@ export const InteractionStyled = styled.div`
   align-items: center;
 
   img {
+    height: 45vh;
+    width: 60vw;
     max-height: 50vh;
     object-fit: contain ;
   }

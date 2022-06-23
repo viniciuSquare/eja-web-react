@@ -15,9 +15,11 @@ export const FeedbackModalStyled = styled.div`
   
   .modal-content {
     background-color: white;
-    min-height: 30vh;
+    min-height: 60%;
     max-height: 90vh;
-    width: 55vw;
+    width: 100%;
+    max-width: 600px;
+
     padding: 1.2rem 1.5rem 2.5rem;
     margin: auto;
     border-radius: 8px;
@@ -30,5 +32,7 @@ export const FeedbackModalStyled = styled.div`
       display: flex ;
       justify-content:space-around ;
     }
+  }
+  @media (max-width: 485px) {
   }
 `

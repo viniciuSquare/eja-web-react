@@ -5,7 +5,7 @@ export const BlocoStyled = styled.div`
   /* align-items:center ; */
   flex: 1;
   
-  * {
+  /* * {
     outline: 1px solid red;
-  }
+  } */
 `

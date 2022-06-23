@@ -3,6 +3,9 @@ import styled from "styled-components";
 export const AlfabetoStyled = styled.div`
   .lists {
     height: 100%;
+    width: 800px;
+    max-width: 80% ;
+    margin: auto;
     display: flex;
 
     flex-direction: column;
@@ -35,6 +38,12 @@ export const AlfabetoStyled = styled.div`
       top: -1.5rem;
 
       font-size: 2rem;
+    }
+  }
+
+  .upper-case {
+    h1 {
+      text-transform: uppercase ;
     }
   }
 

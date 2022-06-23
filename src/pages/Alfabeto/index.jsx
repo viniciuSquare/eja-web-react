@@ -35,7 +35,7 @@ export function Alfabeto() {
           <h2 className="alphabet-legend">Números</h2>
         {
             numbers.map((number, idx)=>{
-              return <Letter key={idx} refLetter={number} />
+              return <Letter key={idx} refLetter={number} number/>
             })
           }
 

@@ -18,7 +18,7 @@ export function SessionContextProvider({children}) {
   }
 
   const [ currentBlocoData, setCurrentBlocoData ] = useState({});
-  const [ currentState, setCurrentState ] = useState({});
+  const [ currentState, setCurrentState ] = useState({...baseBlocoStructure});
 
   const [ activeInteraction, setActiveInteraction] = useState({});
 
@@ -85,11 +85,7 @@ export function SessionContextProvider({children}) {
         setIsLoading(false);
       }).catch( error => { 
         console.log(error)
-        console.log("ERROR, TRYING AGAIN IN 3 SEC");
-
-        // setTimeout(() => {
-        //   getBlocoData(blocoId);
-        // }, 3000)        
+        console.log("ERROR, TRYING AGAIN IN 3 SEC");   
       })
   }
 
@@ -118,6 +114,7 @@ export function SessionContextProvider({children}) {
   
         setCurrentState({...newBloco_baseState});
         localStorage.setItem('bloco',JSON.stringify(newBloco_baseState));
+        navigate('/bloco');
       } else {
         console.log("NEW CS", updatedState);
         setCurrentState(updatedState);
@@ -141,19 +138,21 @@ export function SessionContextProvider({children}) {
   useEffect(()=>{
     if(!user.logged)
       navigate('/login');
-    if(localStorage.getItem("bloco") == undefined)
-      localStorage.setItem('bloco', JSON.stringify(currentState))
 
-    if(currentState.id == undefined ) {
-      console.log("VALIDATING CS")
-      JSON.parse(localStorage.getItem("bloco")).id != undefined 
-      ? setCurrentState(JSON.parse(localStorage.getItem("bloco")) )
-      : setCurrentState({...baseBlocoStructure })
+    if(localStorage.getItem("bloco") == null) {
+      localStorage.setItem('bloco', JSON.stringify(currentState))
+    }
+    else {
+      if(!isNaN(JSON.parse(localStorage.getItem("bloco")).id))
+        setCurrentState(JSON.parse(localStorage.getItem("bloco")))
+      else
+        localStorage.setItem('bloco', JSON.stringify(currentState))    
     }
   },[])
 
   useEffect( () =>{
-    console.log(isNaN(currentBlocoData?.id), isNaN(currentState?.id))
+    if(localStorage.getItem("bloco")==null && !isNaN(currentState.id))
+      localStorage.setItem('bloco', JSON.stringify(currentState));
 
     // IF STATE IS DEFINED & THERE`RE NO BLOCO
     if(isNaN(currentBlocoData?.id) && !isNaN(currentState?.id) ) {

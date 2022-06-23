@@ -51,8 +51,8 @@ export function ActiveInteraction() {
             : !currentState?.atividadeCompletar ?
                 <AtividadeCompletar 
                   letraRef={activeInteraction.letraReferencia} 
-                  palavra={activeInteraction.palavraIncompleta} 
-                  aulaIncompleta={activeInteraction.aulaIncompleta} 
+                  palavra={activeInteraction.palavra} 
+                  palavraIncompleta={activeInteraction.palavraIncompleta} 
                   urlImagem={activeInteraction.urlImagem}
                   optionsList={activeInteraction.alternativas}
                   nextInteractionHandler={nextInteractionHandler}
@@ -98,7 +98,7 @@ export const AtividadeCompletar = ({urlImagem, letraRef, palavra, palavraIncompl
         <button onClick={()=>speak(palavra)} >
           <AiFillSound size='2rem' color="gray"/>
         </button>
-        <Word refWord={palavra} refLetter={letraRef} />
+        <Word refWord={palavraIncompleta} refLetter={letraRef} />
       </div>
       <div className="interaction-options">
         <Options optionsList={optionsList} nextInteractionHandler={nextInteractionHandler}/>
@@ -134,7 +134,7 @@ export const AtividadeDigitar = ({urlImagem, letraRef, palavra, nextInteractionH
   const [ formInputValue, setFormInputValue ] = useState('');
 
   useEffect(()=>{
-    if(formInputValue == palavra.toLowerCase()) {
+    if(formInputValue.toLocaleLowerCase() == palavra.toLowerCase()) {
       nextInteractionHandler()
     }
   },[formInputValue])
@@ -155,7 +155,7 @@ export const AtividadeDigitar = ({urlImagem, letraRef, palavra, nextInteractionH
         
         {/* <Word refWord={palavra} refLetter={letraRef}/> */}
 
-        <form onChange={handleAtividadeDigitarForm}>
+        <form onChange={handleAtividadeDigitarForm} onSubmit={e=>e.preventDefault()}>
           <fieldset >
             <div className="input">
               <input type="text"/>
