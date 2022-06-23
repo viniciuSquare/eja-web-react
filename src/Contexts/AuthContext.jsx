@@ -32,20 +32,9 @@ export function AuthContextProvider(props) {
   }, [user])
   
   async function signInWithGoogle() {
-    const auth = getAuth();
-    signInWithPopup(auth, provider).then(({user: googleUser}) => {
-      console.log(googleUser)
-      const { displayName, photoURL } = googleUser;
-      
-      if( !displayName ) {
-        console.log("NO USER DISPLAY NAME");
-      } else {
-        setUser({
-          logged: true,
-          name: displayName,
-          photoUrl: photoURL || ''
-        })
-      }
+    setUser({
+      logged: true,
+      name: "Seu João"
     })
   }
 
