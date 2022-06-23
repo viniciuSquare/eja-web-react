@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 
 import api from '../services/api'
+import { getAuth, getRedirectResult } from 'firebase/auth';
 
 export const SessionContext = createContext({});
 
@@ -138,6 +139,8 @@ export function SessionContextProvider({children}) {
     return Object.values(interactionsState).every(interaction => interaction == true);
   }   
 
+  const auth = getAuth();
+  
   useEffect(()=>{
     if(!user.logged)
       navigate('/login');
@@ -150,6 +153,10 @@ export function SessionContextProvider({children}) {
       ? setCurrentState(JSON.parse(localStorage.getItem("bloco")) )
       : setCurrentState({...baseBlocoStructure })
     }
+
+    getRedirectResult(auth).then(result => {
+      console.log(result)
+    })
   },[])
 
   useEffect( () =>{

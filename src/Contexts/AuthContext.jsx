@@ -1,4 +1,4 @@
-import { getAuth, signInWithPopup } from 'firebase/auth';
+import { getAuth, getRedirectResult, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import {createContext, useState} from 'react'
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -33,20 +33,21 @@ export function AuthContextProvider(props) {
   
   async function signInWithGoogle() {
     const auth = getAuth();
-    signInWithPopup(auth, provider).then(({user: googleUser}) => {
-      console.log(googleUser)
-      const { displayName, photoURL } = googleUser;
+    signInWithRedirect(auth, provider);
+    // signInWithPopup(auth, provider).then(({user: googleUser}) => {
+    //   console.log(googleUser)
+    //   const { displayName, photoURL } = googleUser;
       
-      if( !displayName ) {
-        console.log("NO USER DISPLAY NAME");
-      } else {
-        setUser({
-          logged: true,
-          name: displayName,
-          photoUrl: photoURL || ''
-        })
-      }
-    })
+    //   if( !displayName ) {
+    //     console.log("NO USER DISPLAY NAME");
+    //   } else {
+    //     setUser({
+    //       logged: true,
+    //       name: displayName,
+    //       photoUrl: photoURL || ''
+    //     })
+    //   }
+    // })
   }
 
   function logoutUser() {
